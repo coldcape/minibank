@@ -87,4 +87,14 @@ public class User {
     public String getFirstName(){
         return this.firstName;
     }
+
+
+    public void printAccountSummary(){
+        System.out.printf("\n\n%s's accounts summary", this.firstName);
+        for (int a = 0;a < this.accounts.size(); a++){
+            System.out.printf("%d) %s\n", this.accounts.get(a).getSummaryLine());
+        }
+        System.out.println();
+    }
+
 }
