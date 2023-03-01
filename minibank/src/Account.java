@@ -53,13 +53,18 @@ public class Account {
 
         // format the summary line, depending on the whether balance is negative
         if (balance >= 0){
-            return String.format("%s : $%.02f : %s", this.uuid, balance, this.name);
+            return String.format("%s : Kr%.02f : %s", this.uuid, balance, this.name);
         } else {
-            return String.format("%s : $(%.02f) : %s", this.uuid, balance, this.name);
+            return String.format("%s : Kr(%.02f) : %s", this.uuid, balance, this.name);
 
         }
     }
 
+    /**
+     * Get the balance of this account by adding the amount of the transactions.
+     *
+     * @return balance value
+     */
     public double getBalance(){
 
         double balance = 0;
@@ -67,7 +72,33 @@ public class Account {
             balance += t.getAmount();
         }
         return balance;
+    }
+
+
+    /**
+     * Printing transaction history of the account
+     */
+    public void printTransHistory(){
+
+        System.out.printf("\nTransaksjons history konto %s", this.uuid);
+        for (int t = this.transactions.size()-1; t >= 0; t--){
+
+            System.out.printf(this.transactions.get(t).getSummaryLine());
+        }
+        System.out.println();
 
     }
 
+    /**
+     *
+     * @param amount
+     * @param memo
+     */
+    public void addTransaction(double amount, String memo){
+
+        // Create new transaction object
+        Transaction newTrans = new Transaction(amount, memo, this);
+        this.transactions.add(newTrans);
+
+    }
 }

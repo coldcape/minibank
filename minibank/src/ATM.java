@@ -114,11 +114,139 @@ public class ATM {
         }
 
         // Redisplay this menu unless the user wants to quit
-        if (choice != 5){
+        if (choice != 5) {
             ATM.printUserMenu(theUser, sc);
         }
+    }
+
+    /**
+     * @param theUser the logged in User object
+     * @param sc      Scanner object used for user input.
+     */
+    public static void showTransHistory(User theUser, Scanner sc) {
+
+        int theAcct;
+
+        do {
+
+            System.out.printf("Velg konto fra listen ved å taste inn et tall fra (1-%d) for å vise transaksjonshistorien den gjeldene kontoen", theUser.numAccounts());
+
+            theAcct = sc.nextInt();
+            if (theAcct < 0 || theAcct >= theUser.numAccounts()) {
+                System.out.println("Ugyldig konto, prøv igjen");
+            }
+        } while (theAcct < 0 || theAcct >= theUser.numAccounts());
+
+        // Printing transaction history
+        theUser.printAcctTransHistory(theAcct);
 
 
     }
 
+
+    /**
+     * Process transferring funds from one account to another
+     *
+     * @param theUser Logged in User object
+     * @param sc      Scanner object used for user input
+     */
+    public static void transferFunds(User theUser, Scanner sc) {
+
+        // Initializing
+        int fromAcct;
+        int toAcct;
+        double amount;
+        double acctBal;
+
+        // Get the account to transfer from
+        do {
+            System.out.printf("Velg kontoen du ønsker å sende penger fra listen ved å taste inn et tall fra (1-%d)\n");
+            fromAcct = sc.nextInt() - 1;
+            if (fromAcct < 0 || fromAcct >= theUser.numAccounts()) {
+                System.out.println("Ugyldig konto, prøv igjen");
+            }
+        } while (fromAcct < 0 || fromAcct >= theUser.numAccounts());
+
+        acctBal = theUser.getAcctBalance(fromAcct);
+
+        // Get the account to transfer to
+        do {
+            System.out.printf("Velg kontoen du ønsker å sende penger til listen ved å taste inn et tall fra (1-%d)\n");
+            toAcct = sc.nextInt() - 1;
+            if (toAcct < 0 || toAcct >= theUser.numAccounts()) {
+                System.out.println("Ugyldig konto, prøv igjen");
+            }
+        } while (toAcct < 0 || toAcct >= theUser.numAccounts());
+
+        // get the amount to transfer
+        do {
+
+            System.out.printf("Tast in mengden som du ønsker å overføre (Max: Kr%.02f", acctBal);
+            amount = sc.nextDouble();
+
+            if (amount < 0) {
+
+                System.out.println("Mengden må være høyere enn 0");
+
+            } else if (amount > acctBal) {
+
+                System.out.printf("Mengden som skal overføres kan i være større enn\n" + "Balansen Kr%.02f\n", acctBal);
+            }
+        } while (amount < 0 || amount > acctBal);
+
+        // Proceed with the transfer
+        theUser.addAcctTransaction(fromAcct, -1 * amount, String.format("Overfør til konto %s", theUser.getAcctUUID(toAcct)));
+        theUser.addAcctTransaction(fromAcct, amount, String.format("Overfør til konto %s", theUser.getAcctUUID(fromAcct)));
+
+    }
+
+    /**
+     * Process a fund to withdraw from an account
+     * @param theUser   Logged in User object
+     * @param sc    Scanner objest user for user input
+     */
+    public static void withdrawlFunds(User theUser, Scanner sc) {
+
+        // Initializing
+        int fromAcct;
+        int toAcct;
+        double amount;
+        double acctBal;
+        String memo;
+
+        // Get the account to transfer from
+        do {
+            System.out.printf("Velg kontoen du ønsker å sende penger fra listen ved å taste inn et tall fra (1-%d)\n");
+            fromAcct = sc.nextInt() - 1;
+            if (fromAcct < 0 || fromAcct >= theUser.numAccounts()) {
+                System.out.println("Ugyldig konto, prøv igjen");
+            }
+        } while (fromAcct < 0 || fromAcct >= theUser.numAccounts());
+
+        acctBal = theUser.getAcctBalance(fromAcct);
+
+        // get the amount to transfer
+        do {
+
+            System.out.printf("Tast in mengden som du ønsker å overføre (Max: Kr%.02f", acctBal);
+            amount = sc.nextDouble();
+
+            if (amount < 0) {
+                System.out.println("Mengden må være høyere enn 0");
+            } else if (amount > acctBal) {
+                System.out.printf("Mengden som skal overføres kan i være større enn\n" + "Balansen Kr%.02f\n", acctBal);
+            }
+        } while (amount < 0 || amount > acctBal);
+
+        // Gobbling up rest of previous input
+        sc.nextLine();
+
+        // Get a memo
+        System.out.println("Legg til melding: ");
+        memo = sc.nextLine();
+
+        // Do withdrawal
+        theUser.addAcctTransaction(fromAcct, -1*amount, memo);
+
+    }
 }
