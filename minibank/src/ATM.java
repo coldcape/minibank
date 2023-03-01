@@ -9,10 +9,10 @@ public class ATM {
         Scanner sc = new Scanner(System.in);
 
         // Initializing Bank
-        Bank theBank = new Bank("Bank of Drausin");
+        Bank theBank = new Bank("Den Norske Bank");
 
         // Adding user for testing so that there is no need to create new user everytime.
-        User aUser = theBank.addUser("John", "Doe", "1234");
+        User aUser = theBank.addUser("Ola", "Nordman", "2020");
 
         // Adding a checking account for the user
         Account newAccount = new Account("Checking", aUser, theBank);
@@ -51,17 +51,17 @@ public class ATM {
         // Prompt for ID and Pin until a correct one is reached.
         do {
 
-            System.out.printf("\n\nWelcome to %s\n\n", theBank.getName());
-            System.out.print("Enter user ID: ");
+            System.out.printf("\n\nVelkommen til %s\n\n", theBank.getName());
+            System.out.print("Tast inn bruker ID: ");
             userID = sc.nextLine();
-            System.out.print("Enter pin: ");
+            System.out.print("Tast inn pin kode: ");
             pin = sc.nextLine();
 
             // Trying to get the user  object corresponding to the ID and pin combination.
             authUser = theBank.userLogin(userID, pin);
             if (authUser == null) {
-                System.out.println("Incorrect user ID/pin combination. " +
-                        "Please try again");
+                System.out.println("Feil ID eller PIN koden. " +
+                        "Prøv Igjen");
             }
 
         } while(authUser == null); //Continue looping until successfull login.
@@ -82,17 +82,17 @@ public class ATM {
         do {
 
             System.out.println("What would you like to do?");
-            System.out.println("  1) Show account transaction history");
-            System.out.println("  2) Withdraw");
-            System.out.println("  3) Deposit");
-            System.out.println("  4) Transfer");
-            System.out.println("  5) Quit");
+            System.out.println("  1) Vis konto transaksjonshistorie");
+            System.out.println("  2) Uttak");
+            System.out.println("  3) Innskudd");
+            System.out.println("  4) Overfør");
+            System.out.println("  5) Avslutt");
             System.out.println();
-            System.out.print("Enter choice: ");
+            System.out.print("Tast inn et valg: ");
             choice = sc.nextInt();
 
             if (choice < 1 || choice > 5) {
-                System.out.println("Invalid choice. Please choose 1-5.");
+                System.out.println("Ugyldig valg. Velg noe mellom 1-5.");
             }
 
         } while (choice < 1 || choice > 5);
@@ -140,43 +140,43 @@ public class ATM {
 
         // get account to transfer from
         do {
-            System.out.printf("Enter the number (1-%d) of the account to " +
-                    "transfer from: ", theUser.numAccounts());
+            System.out.printf("Tast nummeret til konten (1-%d) som det skal sendes fra. " +
+                    "Sendes fra: ", theUser.numAccounts());
             fromAccount = sc.nextInt()-1;
             if (fromAccount < 0 || fromAccount >= theUser.numAccounts()) {
-                System.out.println("Invalid account. Please try again.");
+                System.out.println("Ugyldig konto. Prøv igjen.");
             }
         } while (fromAccount < 0 || fromAccount >= theUser.numAccounts());
         accountBalance = theUser.getAcctBalance(fromAccount);
 
         // get account to transfer to
         do {
-            System.out.printf("Enter the number (1-%d) of the account to " +
-                    "transfer to: ", theUser.numAccounts());
+            System.out.printf("Tast nummeret (1-%d) til kontoen som " +
+                    "skal overføres til: ", theUser.numAccounts());
             toAccount = sc.nextInt()-1;
             if (toAccount < 0 || toAccount >= theUser.numAccounts()) {
-                System.out.println("Invalid account. Please try again.");
+                System.out.println("Ugyldig konto. Prøv igjen.");
             }
         } while (toAccount < 0 || toAccount >= theUser.numAccounts());
 
         // get amount to transfer
         do {
-            System.out.printf("Enter the amount to transfer (max $%.02f): $",
+            System.out.printf("Tast inn mengden som skal overføres (max Kr %.02f): $",
                     accountBalance);
             amount = sc.nextDouble();
             if (amount < 0) {
-                System.out.println("Amount must be greater than zero.");
+                System.out.println("Møngden må være større enn 0.");
             } else if (amount > accountBalance) {
-                System.out.printf("Amount must not be greater than balance " +
-                        "of $.02f.\n", accountBalance);
+                System.out.printf("Mengden kan ikke være større enn hva som er på konto " +
+                        "of Kr %.02f.\n", accountBalance);
             }
         } while (amount < 0 || amount > accountBalance);
 
         // finally, do the transfer
         theUser.addAcctTransaction(fromAccount, -1*amount, String.format(
-                "Transfer to account %s", theUser.getAcctUUID(toAccount)));
+                "Overfør til konto %s", theUser.getAcctUUID(toAccount)));
         theUser.addAcctTransaction(toAccount, amount, String.format(
-                "Transfer from account %s", theUser.getAcctUUID(fromAccount)));
+                "Overfør fra konto %s", theUser.getAcctUUID(fromAccount)));
 
     }
 
@@ -195,32 +195,32 @@ public class ATM {
 
         // get account to withdraw from
         do {
-            System.out.printf("Enter the number (1-%d) of the account to " +
-                    "withdraw from: ", theUser.numAccounts());
+            System.out.printf("Tast in nummeret (1-%d) til kontoen som " +
+                    "uttakes fra: ", theUser.numAccounts());
             fromAccount = sc.nextInt()-1;
             if (fromAccount < 0 || fromAccount >= theUser.numAccounts()) {
-                System.out.println("Invalid account. Please try again.");
+                System.out.println("Ugyldig konto. Prøv igjen.");
             }
         } while (fromAccount < 0 || fromAccount >= theUser.numAccounts());
         accountBalance = theUser.getAcctBalance(fromAccount);
 
 // Get the account to transfer from
         do {
-            System.out.printf("Enter the amount to withdraw (max $%.02f): $",
+            System.out.printf("Tast inn mengden som skal tas i uttakk (max Kr %.02f): Kr",
                     accountBalance);
             amount = sc.nextDouble();
             if (amount < 0) {
-                System.out.println("Amount must be greater than zero.");
+                System.out.println("Mengden må være høyere enn 0.");
             } else if (amount > accountBalance) {
-                System.out.printf("Amount must not be greater than balance " +
-                        "of $%.02f.\n", accountBalance);
+                System.out.printf("Mengden kan ikke være større en hva som er på kontoen " +
+                        "som er Kr %.02f.\n", accountBalance);
             }
         } while (amount < 0 || amount > accountBalance);
 
         // Remove rest of previous inpu
         sc.nextLine();
 
-        System.out.print("Enter a memo: ");
+        System.out.print("Tast inn en melding: ");
         memo = sc.nextLine();
 
         // Do the withdrwal
@@ -242,11 +242,11 @@ public class ATM {
 
         // get account to withdraw from
         do {
-            System.out.printf("Enter the number (1-%d) of the account to " +
-                    "deposit to: ", theUser.numAccounts());
+            System.out.printf("Tast inn nummeret (1-%d) til kontoen som skal få et innskudd " +
+                    "på konto: ", theUser.numAccounts());
             toAccount = sc.nextInt()-1;
             if (toAccount < 0 || toAccount >= theUser.numAccounts()) {
-                System.out.println("Invalid account. Please try again.");
+                System.out.println("gyldig konto. Prøv igjen");
             }
         } while (toAccount < 0 || toAccount >= theUser.numAccounts());
 
