@@ -202,8 +202,9 @@ public class ATM {
 
     /**
      * Process a fund to withdraw from an account
-     * @param theUser   Logged in User object
-     * @param sc    Scanner objest user for user input
+     *
+     * @param theUser Logged in User object
+     * @param sc      Scanner objest user for user input
      */
     public static void withdrawlFunds(User theUser, Scanner sc) {
 
@@ -246,7 +247,51 @@ public class ATM {
         memo = sc.nextLine();
 
         // Do withdrawal
-        theUser.addAcctTransaction(fromAcct, -1*amount, memo);
+        theUser.addAcctTransaction(fromAcct, -1 * amount, memo);
+
+    }
+
+    public static void depositFunds(User theUser, Scanner sc) {
+
+        // Initializing
+        int toAcct;
+        double amount;
+        double acctBal;
+        String memo;
+
+        // Get the account to transfer from
+        do {
+            System.out.printf("Velg kontoen du ønsker å sende penger fra listen ved å taste inn et tall fra (1-%d)\n");
+            toAcct = sc.nextInt() - 1;
+            if (toAcct < 0 || toAcct >= theUser.numAccounts()) {
+                System.out.println("Ugyldig konto, prøv igjen");
+            }
+        } while (toAcct < 0 || toAcct >= theUser.numAccounts());
+
+        acctBal = theUser.getAcctBalance(toAcct);
+
+        // get the amount to transfer
+        do {
+
+            System.out.printf("Tast in mengden som du ønsker å overføre (Max: Kr%.02f", acctBal);
+            amount = sc.nextDouble();
+
+            if (amount < 0) {
+                System.out.println("Mengden må være høyere enn 0");
+            } else if (amount > acctBal) {
+                System.out.printf("Mengden som skal overføres kan i være større enn\n" + "Balansen Kr%.02f\n", acctBal);
+            }
+        } while (amount < 0 || amount > acctBal);
+
+        // Gobbling up rest of previous input
+        sc.nextLine();
+
+        // Get a memo
+        System.out.println("Legg til melding: ");
+        memo = sc.nextLine();
+
+        // Do withdrawal
+        theUser.addAcctTransaction(toAcct, amount, memo);
 
     }
 }
