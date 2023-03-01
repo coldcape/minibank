@@ -10,7 +10,7 @@ public class User {
     //    Universally unique identifier to give users an unique ID
     private String uuid;
     //    MD5 hashed pin of the user
-    private byte[] pinHash;
+    private byte pinHash[];
     //    List of bank accounts a user may have
     private ArrayList<Account> accounts;
 
@@ -72,6 +72,7 @@ public class User {
      */
     public boolean validatePin(String aPin) {
 
+
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             return MessageDigest.isEqual(md.digest(aPin.getBytes()), this.pinHash);
@@ -80,8 +81,19 @@ public class User {
             e.printStackTrace();
             System.exit(1);
         }
-
         return false;
+
+
+//        try {
+//            MessageDigest md = MessageDigest.getInstance("MD5");
+//            return MessageDigest.isEqual(md.digest(aPin.getBytes()), this.pinHash);
+//        } catch (NoSuchAlgorithmException e) {
+//            System.err.println("Error, caught NoSuchAlgorithmException");
+//            e.printStackTrace();
+//            System.exit(1);
+//        }
+//
+//        return false;
     }
 
     public String getFirstName() {
@@ -90,7 +102,7 @@ public class User {
 
 
     public void printAccountsSummary() {
-        System.out.printf("\n\n%s's accounts summary", this.firstName);
+        System.out.printf("\n\n%s's accounts summary\n", this.firstName);
         for (int a = 0; a < this.accounts.size(); a++) {
             System.out.printf("%d) %s\n", a + 1, this.accounts.get(a).getSummaryLine());
         }
@@ -101,32 +113,32 @@ public class User {
         return this.accounts.size();
     }
 
-    public void printAcctTransHistory(int acctIdx){
-        this.accounts.get(acctIdx).printTransHistory();
+    public void printAcctTransHistory(int accountIndex){
+        this.accounts.get(accountIndex).printTransHistory();
     }
 
     /**
      * Get the balance of a specific account
      *
-     * @param acctIdx   index of the account to use
+     * @param accountIndex   index of the account to use
      * @return
      */
-    public double getAcctBalance(int acctIdx){
-        return this.accounts.get(acctIdx).getBalance();
+    public double getAcctBalance(int accountIndex){
+        return this.accounts.get(accountIndex).getBalance();
     }
 
     /**
      *
-     * @param acctIdx   Index of the account to be used
+     * @param accountIndex   Index of the account to be used
      * @return UUID of the account
      */
-    public String getAcctUUID(int acctIdx){
-        return this.accounts.get(acctIdx).getUUID();
+    public String getAcctUUID(int accountIndex){
+        return this.accounts.get(accountIndex).getUUID();
     }
 
-    public void addAcctTransaction(int acctIdx, double amount, String memo){
+    public void addAcctTransaction(int accountIndex, double amount, String memo){
 
-        this.accounts.get(acctIdx).addTransaction(amount, memo);
+        this.accounts.get(accountIndex).addTransaction(amount, memo);
 
     }
 }
