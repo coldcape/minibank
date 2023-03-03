@@ -113,7 +113,7 @@ public class User {
         return this.accounts.size();
     }
 
-    public void printAcctTransHistory(int accountIndex){
+    public void printAccountTransactionHistory(int accountIndex){
         this.accounts.get(accountIndex).printTransHistory();
     }
 

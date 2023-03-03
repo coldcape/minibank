@@ -101,7 +101,7 @@ public class ATM {
         switch (choice) {
 
             case 1:
-                ATM.showTransHistory(theUser, sc);
+                ATM.showTransactionHistory(theUser, sc);
                 break;
             case 2:
                 ATM.withdrawFunds(theUser, sc);
@@ -276,22 +276,22 @@ public class ATM {
      * @param theUser	the logged-in User object
      * @param sc		the Scanner object used for user input
      */
-    public static void showTransHistory(User theUser, Scanner sc) {
+    public static void showTransactionHistory(User theUser, Scanner sc) {
 
-        int theAccountt;
+        int theAccount;
 
         // get account whose transactions to print
         do {
             System.out.printf("Enter the number (1-%d) of the account\nwhose " +
                     "transactions you want to see: ", theUser.numAccounts());
-            theAccountt = sc.nextInt()-1;
-            if (theAccountt < 0 || theAccountt >= theUser.numAccounts()) {
+            theAccount = sc.nextInt()-1;
+            if (theAccount < 0 || theAccount >= theUser.numAccounts()) {
                 System.out.println("Invalid account. Please try again.");
             }
-        } while (theAccountt < 0 || theAccountt >= theUser.numAccounts());
+        } while (theAccount < 0 || theAccount >= theUser.numAccounts());
 
         // print the transaction history
-        theUser.printAcctTransHistory(theAccountt);
+        theUser.printAccountTransactionHistory(theAccount);
 
     }
 
